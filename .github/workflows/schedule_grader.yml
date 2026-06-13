@@ -36,7 +36,7 @@ jobs:
                   echo "Found new ungraded commit $LATEST_SHA in $r. Triggering grading..."
                   curl -s -X POST -H "Authorization: token $GRADER_TOKEN" \
                     -H "Accept: application/vnd.github.v3+json" \
-                    "https://api.github.com/repos/PPL-CO3005-2025-3/ppl-grading/dispatches" \
+                    "https://api.github.com/repos/nhphung1964/ppl-grading/dispatches" \
                     -d "{\"event_type\": \"grade_submission\", \"client_payload\": {\"student_repo\": \"PPL-CO3005-2025-3/$r\", \"student_sha\": \"$LATEST_SHA\"}}"
                 else
                   echo "Commit $LATEST_SHA already has grading check-runs."
