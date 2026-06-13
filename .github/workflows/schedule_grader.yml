@@ -26,11 +26,11 @@ jobs:
                 "https://api.github.com/repos/PPL-CO3005-2025-3/$r/commits/main" | jq -r '.sha')
               
               if [ "$LATEST_SHA" != "null" ] && [ -n "$LATEST_SHA" ]; then
-                # Check check-runs status of latest commit
+                # Check statuses of latest commit
                 STATUS_CHECK=$(curl -s -H "Authorization: token $GRADER_TOKEN" \
-                  "https://api.github.com/repos/PPL-CO3005-2025-3/$r/commits/$LATEST_SHA/check-runs")
+                  "https://api.github.com/repos/PPL-CO3005-2025-3/$r/commits/$LATEST_SHA/status")
                 
-                # If there are no check-runs for this commit, trigger grader!
+                # If there are no statuses for this commit, trigger grader!
                 TOTAL_CHECKS=$(echo "$STATUS_CHECK" | jq -r '.total_count')
                 if [ "$TOTAL_CHECKS" = "0" ] || [ "$TOTAL_CHECKS" = "null" ]; then
                   echo "Found new ungraded commit $LATEST_SHA in $r. Triggering grading..."
