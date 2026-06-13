@@ -10,36 +10,37 @@ jobs:
     steps:
       - name: Check Student Commits and Trigger Grader
         env:
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
           GRADER_TOKEN: ${{ secrets.GRADER_TOKEN }}
         run: |
           echo "Scanning student repositories for new commits..."
-          # Query GitHub API to list repos in organization
-          REPOS=$(curl -s -H "Authorization: token $GRADER_TOKEN" \
+          # Query GitHub API to list repos in organization (using ADMIN_TOKEN which has org access)
+          REPOS=\$(curl -s -H "Authorization: token \$ADMIN_TOKEN" \
             "https://api.github.com/orgs/PPL-CO3005-2025-3/repos?per_page=100" | jq -r '.[].name')
           
-          for r in $REPOS; do
+          for r in \$REPOS; do
             # Filter student assignment repos (e.g. starting with minirust-assignment)
-            if [[ "$r" == minirust-assignment-* ]]; then
-              echo "Checking repo: $r"
-              # Get latest commit SHA
-              LATEST_SHA=$(curl -s -H "Authorization: token $GRADER_TOKEN" \
-                "https://api.github.com/repos/PPL-CO3005-2025-3/$r/commits/main" | jq -r '.sha')
+            if [[ "\$r" == minirust-assignment-* ]]; then
+              echo "Checking repo: \$r"
+              # Get latest commit SHA (using ADMIN_TOKEN to read private student repos)
+              LATEST_SHA=\$(curl -s -H "Authorization: token \$ADMIN_TOKEN" \
+                "https://api.github.com/repos/PPL-CO3005-2025-3/\$r/commits/main" | jq -r '.sha')
               
-              if [ "$LATEST_SHA" != "null" ] && [ -n "$LATEST_SHA" ]; then
-                # Check statuses of latest commit
-                STATUS_CHECK=$(curl -s -H "Authorization: token $GRADER_TOKEN" \
-                  "https://api.github.com/repos/PPL-CO3005-2025-3/$r/commits/$LATEST_SHA/status")
+              if [ "\$LATEST_SHA" != "null" ] && [ -n "\$LATEST_SHA" ]; then
+                # Check statuses of latest commit (using ADMIN_TOKEN to read statuses)
+                STATUS_CHECK=\$(curl -s -H "Authorization: token \$ADMIN_TOKEN" \
+                  "https://api.github.com/repos/PPL-CO3005-2025-3/\$r/commits/\$LATEST_SHA/status")
                 
                 # If there are no statuses for this commit, trigger grader!
-                TOTAL_CHECKS=$(echo "$STATUS_CHECK" | jq -r '.total_count')
-                if [ "$TOTAL_CHECKS" = "0" ] || [ "$TOTAL_CHECKS" = "null" ]; then
-                  echo "Found new ungraded commit $LATEST_SHA in $r. Triggering grading..."
-                  curl -s -X POST -H "Authorization: token $GRADER_TOKEN" \
+                TOTAL_CHECKS=\$(echo "\$STATUS_CHECK" | jq -r '.total_count')
+                if [ "\$TOTAL_CHECKS" = "0" ] || [ "\$TOTAL_CHECKS" = "null" ]; then
+                  echo "Found new ungraded commit \$LATEST_SHA in \$r. Triggering grading..."
+                  curl -s -X POST -H "Authorization: token \$GRADER_TOKEN" \
                     -H "Accept: application/vnd.github.v3+json" \
                     "https://api.github.com/repos/nhphung1964/ppl-grading/dispatches" \
-                    -d "{\"event_type\": \"grade_submission\", \"client_payload\": {\"student_repo\": \"PPL-CO3005-2025-3/$r\", \"student_sha\": \"$LATEST_SHA\"}}"
+                    -d "{\"event_type\": \"grade_submission\", \"client_payload\": {\"student_repo\": \"PPL-CO3005-2025-3/\$r\", \"student_sha\": \"\$LATEST_SHA\"}}"
                 else
-                  echo "Commit $LATEST_SHA already has grading check-runs."
+                  echo "Commit \$LATEST_SHA already has grading check-runs."
                 fi
               fi
             fi
