@@ -1,19 +1,2 @@
-# MiniRust-Discussion
-
-Welcome to the discussion forum for the **Principles of Programming Languages** course!
-
-This repository serves as a Q&A board to help you collaborate, solve problems, and clarify requirements for your course project assignments.
-
-Please note that the **Announcements** category is strictly reserved for official announcements and updates from the instructors.
-
-## Discussion Guidelines & Rules:
-
-1. **Student Collaboration**: Students are highly encouraged to help and answer questions posted by their peers. Supporting others is a great way to deepen your own understanding.
-2. **Start Early**: Please begin working on your assignments early to identify issues and post your questions as soon as possible. To encourage timely progress and independent work, **instructors and TAs will stop answering questions 3 days before the deadline** for each assignment.
-3. **No Validation/Confirmation Questions**: Do not post questions asking for simple confirmation of correctness (e.g., "Is this output correct?", "Can you check if my code is right?"). You should only post questions when you encounter genuine confusion or ambiguity.
-4. **Clarify Confusion**: When posting a question, you must clearly specify and explain the exact content or requirement that is causing the confusion. Vague or low-effort questions may be closed or left unanswered.
-5. **Academic Integrity & Code Review**: Do not post complete solutions, large blocks of implementation code, or direct answers to assignment tasks. Keep discussion focused on conceptual understanding, specifications, and debugging strategies.
-   - **Important**: If you want the instructor or TAs to review and help debug your code, you must open a **Pull Request** (PR) against the `main` branch of your private student repository and request review there. Do NOT post your code snippets publicly on this discussion board.
-6. **Search Before Posting**: Before creating a new discussion thread, you must search and check previously posted discussions. Avoid posting a new thread for an issue or question that has already been addressed or discussed in a prior post.
-
-Good luck with your assignments!
+## Notice
+The Discussions for Assignments are moved to the Forums in our course site in [lms.hcmut.edu.vn](https://lms.hcmut.edu.vn). Please use the Forums there to post your questions.
